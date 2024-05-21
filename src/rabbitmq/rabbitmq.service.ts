@@ -23,17 +23,13 @@ export class RabbitmqService implements OnModuleInit, OnModuleDestroy {
     this.client.close();
   }
 
-  public async sendMessage(pattern: string, data: any) {
+  public sendMessage(pattern: string, data: any) {
     this.logger.log(`Sending message with pattern: ${pattern}`);
-    const message = { data };  // Wrap the data in an object
-    return this.client.send(pattern, message).toPromise();
+    return this.client.send(pattern, data);
   }
-  
 
   public async sendEvent(pattern: string, data: any) {
     this.logger.log(`Emitting event with pattern: ${pattern}`);
-    const message = { data };  // Wrap the data in an object
-    await this.client.emit(pattern, message).toPromise();
+    await this.client.emit(pattern, data).toPromise();
   }
-  
 }

@@ -7,6 +7,7 @@ export class RabbitmqController {
 
   @Post('send')
   async sendMessage(@Body() data: { pattern: string; message: any }) {
+    console.log("in the controller");
     return this.rabbitmqService.sendMessage(data.pattern, data.message);
   }
 
