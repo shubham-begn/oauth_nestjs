@@ -10,7 +10,7 @@ export class RabbitmqService implements OnModuleInit, OnModuleDestroy {
     this.client = ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://localhost:5672'],  // Change to the RabbitMQ server URL
+        urls: ['amqp://localhost:5672'],
         queue: 'main_queue',
         queueOptions: {
           durable: false,
@@ -23,13 +23,10 @@ export class RabbitmqService implements OnModuleInit, OnModuleDestroy {
     this.client.close();
   }
 
-  public sendMessage(pattern: string, data: any) {
-    this.logger.log(`Sending message with pattern: ${pattern}`);
-    return this.client.send(pattern, data);
-  }
-
   public async sendEvent(pattern: string, data: any) {
     this.logger.log(`Emitting event with pattern: ${pattern}`);
-    await this.client.emit(pattern, data).toPromise();
+    await this.client.emit(pattern, data).toPromise()
+      .then(() => this.logger.log(`Event with pattern: ${pattern} emitted successfully`))
+      .catch(err => this.logger.error(`Failed to emit event with pattern: ${pattern}`, err));
   }
 }
